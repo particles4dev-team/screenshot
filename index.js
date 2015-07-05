@@ -1,4 +1,5 @@
 var Hapi = require('hapi');
+var Path = require('path');
 
 // Create a server with a host and port
 var server = new Hapi.Server();
@@ -9,6 +10,16 @@ server.connection({
 
 // Add the route
 server.route(require('./routes'));
+
+server.views({
+    engines: {
+        html: require('handlebars')
+    },
+    path: 'views',
+    helpersPath: 'views/helpers',
+    layoutPath: 'views/layout',
+    layout: 'default'
+});
 
 // Start the server
 server.register({
