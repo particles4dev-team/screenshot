@@ -7,6 +7,5 @@ module.exports = [{
     'Now it was the Jew’s turn. “I want a big bowl of strawberries, ” said the Jew.<br>',
     '“Strawberries!!! They aren’t even in season!”<br/>',
     '“So, I’ll wait…”'
-    ].join(''),
-    color: '#000'
+    ].join('')
 }];
