@@ -1,5 +1,6 @@
 var Hapi = require('hapi');
 var Path = require('path');
+var _    = require('lodash');
 
 // Create a server with a host and port
 var server = new Hapi.Server();
@@ -166,8 +167,9 @@ var REQUEST_TIMEOUT = 15*1000;
 // small for our docs.
 var MAX_BUFFER = 5*1024*1024; // 5MB
 PHANTOM_SCRIPT = fs.readFileSync("./bin/screenshot.js", "utf8");
-function screenshot () {
-    var pt = 'var url = "http://localhost:3000/story/0"; var urls = url.split("/");' + PHANTOM_SCRIPT;
+function screenshotTask (num) {
+    console.log('http://localhost:3000/story/' + num + '"');
+    var pt = 'var url = "http://localhost:3000/story/' + num + '"; var urls = url.split("/");' + PHANTOM_SCRIPT;
     child_process.execFile('/bin/bash', [
         '-c',
         // https://groups.google.com/forum/#!msg/meteor-talk/dPLss2idrJg/Dd4qL9O9d6AJ
@@ -191,5 +193,16 @@ function screenshot () {
         }
         else
             console.log("done: ");
+    });
+}
+var stories = require('./private/stories');
+
+function screenshot (num) {
+    var a = new Pipeline();
+    for (var i = stories.length - 1; i >= 0; i--) {
+        a.push(screenshotTask.bind(null, i));
+    };
+    a.sequenceFlush({
+        duration: 1500 //ms
     });
 }
